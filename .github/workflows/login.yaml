@@ -1,0 +1,26 @@
+name: Run checkIn_Aliyunpan
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"  # 每天1点运行一次，北京时间会是当天晚上 9:40 ~ 10:00
+  push:
+    branches:
+      - main
+jobs:
+  login:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 仓库代码
+        uses: actions/checkout@v2
+
+      - name: 设置环境变量
+        env:
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+
+      - name: 运行 Bash 脚本
+        run: |
+          bash ali_auto.sh
+        env:
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
