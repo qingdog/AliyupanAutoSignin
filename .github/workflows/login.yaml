@@ -15,11 +15,7 @@ jobs:
       - name: Checkout 仓库代码
         uses: actions/checkout@v2
 
-      - name: 设置环境变量
-        env:
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-
-      - name: 运行 Bash 脚本
+      - name: 设置secrets变量到环境变量并运行 Bash 脚本
         run: |
           bash ali_auto.sh
         env:
