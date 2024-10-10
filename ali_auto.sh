@@ -3,6 +3,7 @@
 # author:kratos
 
 #你自己的refresh_token
+
 refresh_token="${REFRESH_TOKEN}"
 
 function get_json_value()
@@ -43,6 +44,8 @@ sign=$(curl -s -X POST -H "Content-Type: application/json" -H 'Authorization:Bea
 success=$(echo $sign | grep -ioP '"success":.*?[,}]')
 title=$(echo $sign | grep -ioP '"title":.*?[,}]')
 subject=$(echo $sign | grep -ioP '"subject":.*?[,}]')
+
+signInCount=$(echo $sign | grep -ioP '(?<="signInCount":).*?(?=[,"}])')
 signInCover=$(echo "$sign" | grep -ioP '"signInCover":.*?[,}]')
 # 输出 $title $subject $signInCover 值
 echo "$title $subject $signInCover"
@@ -52,5 +55,16 @@ if [[ -z "$title" || "$success" != '"success":true,' ]]; then
   message=$(echo "$sign" | grep -o '"message": *"[^"]*"' )
   echo "错误！！！：code: $code, $message"
 else
-  echo "签到执行状态： $success"
+  echo "签到执行状态： $success 你已经签到： $signInCount "
 fi
+
+# 领取奖励（{"code":"Forbidden","message":"请升级最新客户端访问","requestId":"0a00700817285276256135451e3db4"}）
+url="https://member.aliyundrive.com/v1/activity/sign_in_reward?_rx-s=mobile"
+
+# 构造 JSON 数据
+reward_body='{"signInDay": "'"$signInCount"'"}'
+# 使用 curl 发送 POST 请求
+#response=$(curl -s -X POST "$url"  -H "Content-Type: application/json"  -H "Authorization: $access_token" -d "$reward_body" )
+#echo $response
+# 使用原生工具解析 JSON
+#reward=$(echo "$response" | grep -o '"notice":"[^"]*"' | sed 's/"notice":"\([^"]*\)"/\1/')

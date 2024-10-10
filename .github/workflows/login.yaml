@@ -3,7 +3,7 @@ name: Run checkIn_Aliyunpan
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"  # 每天1点运行一次，北京时间会是当天晚上 9:40 ~ 10:00
+    - cron: "0 1 * * *"  # 每天UTC时间凌晨1点运行一次，北京时间会是当天早上 9:40 ~ 10:20
   push:
     branches:
       - main
